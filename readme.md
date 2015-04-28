@@ -113,6 +113,8 @@ Considering a bucket named `https_upload_bucket`:
 
 This restricts the credential to just that bucket.
 
+It is a good idea to create the bucket prior, so that you are assured the bucket name is available (s3 bucket namespace is global). 
+
 ## Notes and Misc
 
 * Remember, this app has no auth. Don't just deploy and leave it; restrict access somehow!
