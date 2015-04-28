@@ -55,7 +55,7 @@ When you click a file to download, the web application generates a temporary pre
 
 Its extremely important to realize that this web application does not have a layer of authentication built in. That is, when you deploy this app, determine how you want to limit access to this application. Do NOT make it accessible to /0 otherwise anyone could use it to just download your files.
 
-If you deploy this to elastic beanstalk, make sure to adjust the associated security-group.
+If you deploy this to elastic beanstalk, make sure to adjust the associated security-group. We recommend a single instance (no elastic load balancer) since the app itself is very thin. If you decide to use an elastic load balancer and an auto-scaling group, make sure to deploy this within a VPC so you can restrict access to the application via VPC constraints.
 
 Some options: implement a layer of authentication at a load balancer fronting the application, add basic authentication, use IP whitelisting via security-groups to limit access to the host, deploy on a private network.
 
