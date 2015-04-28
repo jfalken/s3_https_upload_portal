@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Info</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/custom.css" rel="stylesheet">
+  </head>
+   <body> 
+    {% include 'navbar.html' %}
+
+  <div class="container">
+
+<h2 id="what-is-this-">What is this?</h2>
+<p>This tool is used to create an HTTPS upload endpoint for customers. The endpoint
+can be used to upload file(s) via a web browser or command line tools, such as <code>curl</code>.</p>
+<p>This can be thought of as an alternative to the existing MongoDB dropbox tool.</p>
+<h2 id="what-do-i-need-to-do-">What do I need to do?</h2>
+<p>Provide the form with the necessary parameters, most importantly the <code>customer name</code> / <code>identifier</code>.
+The tool will then create an endpoint for the customer to access, sign it, and ship it off to and s3 bucket.</p>
+<p>You provide the customer with a link. They can then upload via their web browser or curl. Traffic is HTTPS and files are stored
+in S3 with encryption at rest.</p>
+<h2 id="how-do-i-access-what-they-upload-">How do I access what they upload?</h2>
+<p>All files are stored encrypted-at-rest in an s3 bucket on Amazon.  Those files can be viewed via this application
+  as well. When you download a file thorugh this site, the application generates a signed temporary download URL. The file
+  is then downloaded directly from s3, thereby reducing the need for our servers to transfer and store the file(s). It's also quicker.
+</p>
+<br><br>
+<h2 id="parameters">Parameters</h2>
+<h3 id="customer-name-identifier">Customer Name / Identifier</h3>
+<p>Enter an identifying string here, such as a customer name or CS ticket number. The file(s) uploaded by the
+customer will be placed in a folder of this name. You can only use Alphanum characters, numbers,
+<code>-</code> and <code>_</code> in this field.</p>
+<h3 id="expiration-date">Expiration Date</h3>
+<p>The form this tool generates will eventually expire. The expiration date should be entered here. Try to keep
+the value low, but long enough to be of use to your customer. This defaults to 2 weeks past the current date.</p>
+<p>If a form expires, you can always generate a new one.</p>
+
+<br><br>
+<h2 id="this-tool-stinks-it-should-do-xyz-">This tool stinks, it should do XYZ.</h2>
+<p>This tool is loosely maintained by TECHOPS. If you wish to contribute, the repo is <code>https://github.com/10gen/https-dropbox</code></p>
+
+</div> 
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/tooltip.js"></script>
+  </body>
+</html>
+
+

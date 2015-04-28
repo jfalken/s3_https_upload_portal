@@ -1,0 +1,6 @@
+venv/*
+notes/*
+*.prod
+*.pyc
+*.log
+.elasticbeanstalk/

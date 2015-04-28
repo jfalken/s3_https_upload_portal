@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="MongoDB Customer Support Upload Form Creator">
+    <title>MongoDB Customer Support Upload Form Creator</title>
+
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/custom.css" rel="stylesheet">
+    <link href="static/css/datepicker3.css" rel="stylesheet">
+    <link href="static/css/bootstrapValidator.min.css" rel="stylesheet">
+
+  </head>
+   <body> 
+    {% include 'navbar.html' %}
+
+<div class="container"></div>
+  
+    {# ------ The Form ------ #}
+  <div class="container col-md-6 center-block" id="theform">
+      <form class="form-group" role="form", action="/generate_form", method="POST">
+        <h2 class="form-signin-heading">Generate an Endpoint</h2>
+
+        <br><span>Customer/Identifier Name</span>
+            <span data-toggle="tooltip" data-placement="top" title="Folder Name to store the file(s) in.">
+              <span class="glyphicon glyphicon-info-sign"></span>
+            </span>
+            <input type="text" class="form-control" placeholder="Enter a Value" name="directory">
+
+        <br><span>Max Upload Size (bytes)</span>
+            <span data-toggle="tooltip" data-placement="top" title="Largest single file size to accept. Total bucket size is unlimited.">
+              <span class="glyphicon glyphicon-info-sign"></span>
+            </span>
+            <select class="form-control input-sm" value="5368709120" placeholder="Max File Size" name="maxupload">
+              <option value="5368709120">5 GiB</option>
+              <option value="2147483648">2 GiB</option>
+              <option value="1073741824">1 GiB</option>
+            </select>
+
+         <br><span>File Expiration Lifetime (days)</span>
+            <span data-toggle="tooltip" data-placement="top" title="After this number of days, the uploaded files will be automatically deleted. Maximum and default value is 180 days.">
+              <span class="glyphicon glyphicon-info-sign"></span>
+            </span>
+            <select class="form-control input-sm" value="180" placeholder="Max File Size" name="lifecycle">
+              <option value="180">180 days</option>
+              <option value="90">90 days</option>
+              <option value="30">30 days</option>
+            </select>
+
+        <br><span>Upload Link Epiration Date</span>
+            <span data-toggle="tooltip" data-placement="top" title="After this date, the upload link provided to customers will stop working and a new one will need to be generated.">
+              <span class="glyphicon glyphicon-info-sign"></span>
+            </span>
+        <div class="input-group date datepicker no-padding" data-date-format="yyyy-mm-dd">
+          <input type="text" value="{{defaultdate}}"name="exp" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+        </div>
+
+        <br><span>Optional Text to Include to Customers</span>
+            <span data-toggle="tooltip" data-placement="top" title="Any text entered here will also be present in the page provided to the customer.">
+              <span class="glyphicon glyphicon-info-sign"></span>
+            </span>
+            <input type="textarea" class="form-control" placeholder="Notes (optional)" name="notes" value="">
+
+          {# -- The Button -- #}
+        <br><button class="btn btn-lg btn-success btn-block" type="submit">Generate</button>
+
+
+      </form>
+  </div> 
+
+{# <br>Bucket Name<input type="text" class="form-control" placeholder="Bucket Name" name="bucket_name" value="chriseb"> #}
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/tooltip.js"></script>
+    <script src="/static/js/bootstrap-datepicker.js"></script>
+    <script src="/static/js/bootstrapValidator.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+    $('.datepicker').datepicker({
+                autoclose: true,
+                startDate: new Date(),
+                format: "yyyy-mm-dd"
+            });
+     });
+        </script>
+
+      <script>
+      $(document).ready(function() {
+    $('.theform').bootstrapValidator({
+        message: 'The customer name/identifier is not valid',
+        live: 'enabled',
+        submitButtons: 'button[type="submit"]',
+        trigger: null,
+        fields: {
+            directory: {
+                message: 'The customer name/identifier is not valid',
+                validators: {
+                    notEmpty: {
+                        message: 'This field cannot be empty.'
+                              },
+                            },
+                        },
+                },
+         })});
+      </script>
+
+  </body>
+</html>
+
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="MongoDB Customer Support Upload Page">
+    <title>MongoDB Customer Support Upload Page</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/dropzone.css" rel="stylesheet">
+  </head> 
+   <body> 
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"><img src="https://www.mongodb.com/sites/all/themes/mongodb_com/favicon.ico"/>MongoDB Support File Upload</a>
+          </div>
+          <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+          </div>
+        </div>
+      </div>
+      <br><br><br>
+
+<div class="container"></div>
+
+    {# ------ The Form ------ #}
+  <div class="container col-md-6" id="theform">
+
+        <h2 class="form-signin-heading">Upload from your Browser</h2>
+      <form class="dropzone" id="my-dropzone" role="form" action="https://{{ bucket_name }}.s3.amazonaws.com/" method="POST" enctype="multipart/form-data">
+
+        {# AWS S3 Signed Policy Details #}
+        <input type="hidden" name="key" value="{{ directory }}/${filename}">
+        <input type="hidden" name="AWSAccessKeyId" value="{{ access_key }}"> 
+        <input type="hidden" name="acl" value="private"> 
+        <input type="hidden" name="x-amz-server-side-encryption" value="AES256"> 
+        <input type="hidden" name="policy" value="{{ policy }}">
+        <input type="hidden" name="signature" value="{{ signature }}">
+
+        <div class="fallback">
+           <input name="file" type="file"><br><br>
+         </div>
+      </form>
+  </div> 
+
+      <h2>Upload via curl</h2>
+      <span>
+        Alternatively, you can HTTPS POST using a tool like curl, via the following syntax. Replace <code>file.name</code> with the file you wish to upload
+      <span>
+      <br><br>
+      <pre>
+curl -F "key={{ directory }}/\${filename}" \
+     -F "AWSAccessKeyId={{ access_key }}" \
+     -F "acl=private" \
+     -F "x-amz-server-side-encryption=AES256" \
+     -F "policy={{ policy }}" \
+     -F "signature={{ signature }}" \
+     -F "file=@file.name" \
+     https://{{bucket_name}}.s3.amazonaws.com</pre>
+
+     <div class="container"></div>
+    <div class="container">
+      <div class="alert alert-info" role="alert">
+        All files uploaded here are transmitted encrypted and stored encrypted at rest. Files are only accessible by MongoDB Inc. Employees.
+      </div>
+    </div><br>
+
+      {% if notes | length > 1 %}
+    <div class="container">
+      <h3>Additional Notes<h3>
+        <pre>
+{{notes}}
+      </pre>
+    </div>
+      {% endif %}
+
+
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/dropzone.js"></script>
+    <script src="static/js/tooltip.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+
+    <script>
+      Dropzone.options.myDropzone = {
+        maxFilesize: {{max_in_megs}},
+        init: function() {
+          this.on("uploadprogress", function(file, progress) {
+            console.log("File progress", progress);
+          });
+        }
+      }
+    </script>
+
+  </body>
+</html>

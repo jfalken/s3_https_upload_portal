@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>File Listing</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/custom.css" rel="stylesheet">
+    <link href="static/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css">
+  </head>
+   <body> 
+    {% include 'navbar.html' %}
+
+      <h1>&nbspFile Listing
+        {% if folder != '' %}
+        <small>Only showing files for '{{folder}}'
+          <small><a href="/files?view=tree"><span class="glyphicon glyphicon-th-list">
+            </span></a></small></small>
+
+        {% endif %}
+      </h1>
+
+        <div class="container col-md-6">
+          {% if folder != '' %}
+          <a href="/files?folder={{folder}}"><h6>Switch to table view<h6></a>
+          {% else %}
+          <a href="/files"><h6>Switch to table view<h6></a>
+          {% endif %}
+          <ul id="ztreeid" class="ztree"></ul>
+        </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.ztree.all-3.5.min.js"></script>
+
+  <script>
+     function get_ztree() {
+      $.ajax({
+        type: "GET",
+        url: "/ztreeapi?folder={{folder}}",
+        dataType: "json",
+        success: function(msg){
+            zNodes = jQuery.parseJSON(msg);
+            $.fn.zTree.init($("#ztreeid"), {}, zNodes);
+        },
+    })};
+    $.when(get_ztree()).done($.fn.zTree.init($("#ztreeid")));
+   </script>
+
+  </body>
+</html>

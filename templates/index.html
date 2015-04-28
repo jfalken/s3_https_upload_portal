@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="MongoDB Customer Support Upload Form Creator">
+    <title>MongoDB Customer Support Upload Form Creator</title>
+
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/custom.css" rel="stylesheet">
+    <link href="static/css/datepicker3.css" rel="stylesheet">
+
+<style>
+ .btn-center{
+  text-align: center;
+ }
+</style>
+
+  </head>
+   <body> 
+    {% include 'navbar.html' %}
+
+    {# ------ Jumbotron ------ #}
+    <div class="container col-md-6 col-md-offset-3">
+      <div class="jumbotron">
+        <div class="row">
+          <p>
+            Use this tool to create a customer-specific HTTPS POST endpoint.
+            <br>
+            <p class="text-center"><a href="/info" class="btn btn-info btn-lg" role="button">Learn more</a>
+            </p>
+          </p>
+        </div>
+      </div>
+           <div class="jumbotron">
+         <h2><center>What would you like to do?</center></h2>
+            <div class="container btn-center">
+            <a href="/files" class="btn btn-primary btn-lg" role="button">View Files</a>
+            <a href="/bucketparams" class="btn btn-primary btn-lg" role="button">Generate an Upload Portal</a></div>
+          </div>
+     </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/tooltip.js"></script>
+
+  </body>
+</html>
+
+
