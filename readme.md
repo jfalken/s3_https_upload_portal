@@ -73,6 +73,8 @@ There are three required configuration parameters. Since this is intended for el
 
 ## Deployment
 
+### Via the GUI
+
 * Clone this repo
 * Make an elastic beanstalk zip archive:
 
@@ -80,10 +82,51 @@ There are three required configuration parameters. Since this is intended for el
 
 Note; you must create a zip in this manner. Elastic Beanstalk requires all files unzip and NOT have a top level directory. If you 'download Zip' from GitHub, you get a top level directory and elastic beanstalk won't work.
 
+In the AWS Console GUI:
+
 * Create a new elastic beanstalk environment
   * Details are out of scope of this doc; you can select single instance, python 2.7
 * Choose 'upload archive', and select the zip created earlier.
 
+#### Configuring Credentials
+
+In the GUI under XXXX, set the following environmental variables
+
+`BUCKET` = Name of your s3 bucket
+
+`AWS_ACCESS_KEY_ID` = AWS Access key
+
+`AWS_SECRET_KEY` = Secret associated w/ the above access key.
+
+Hit `apply` and your environment will restart.
+
+### Via the Command Line
+
+1. Install the AWS EB Command line tools:
+
+`pip install awsebcli`
+
+2. Clone the repo locally.
+
+`git clone git@github.com:jfalken/s3_https_upload_portal.git`
+
+3. Initialize EB
+
+`eb init` and answer all appropriate questions. Select py 2.7. FYI, Any credentials are stored in `~/.aws/credentials`.
+
+4. Create your EB Environent
+
+`eb create UploadPortal --single --envvars BUCKET=<bucket_name>,AWS_ACCESS_KEY_ID=<key>,AWS_SECRET_KEY=<secret>`
+
+Where `bucket_name` is the name of the s3 bucket.
+
+`key` is your access key id.
+
+`secret` is your AWS secret for the associated key.
+
+Change `UploadPortal` to whatever you want to name the application. 
+
+Note, entering this via the command line is risky. If you prefer, you can leave out the `--envvars` command line option and instead populate these environmental variables via the GUI after launch (See `Configuring Credentials` above).
 
 ### AWS Key Scope
 
