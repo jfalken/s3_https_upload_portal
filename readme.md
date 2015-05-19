@@ -173,6 +173,10 @@ export AWS_ACCESS_KEY_ID=key
 export AWS_SECRET_KEY=secret
 ```
 
+## Customizing
+
+Change the name of the portal and icon link by editting the `templates/navbar.html` file.
+
 ## Contributing
 
 Issues should be created using GitHub issues. If you have an addition, please fork and submit a pull request.
