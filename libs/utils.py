@@ -26,6 +26,11 @@ def setup_logging():
     return logging
 
 
+def dt_to_string(dt):
+    ''' converts a date time object to a string for pretty printing '''
+    return dt.strftime('%Y-%m-%d %H:%M:%S')
+
+
 def init():
     ''' initialize the bucket'''
 
@@ -53,7 +58,7 @@ def init():
     try:
         k = boto.s3.key.Key(bucket)
         for prefix in ['', 'upload_forms/']:
-            files = get_file_paths('static')
+            files = getFilePaths('static')
             for f in files:
                 key = prefix + str(f)
                 if not bucket.get_key(key):
@@ -65,7 +70,7 @@ def init():
         raise
 
 
-def get_file_paths(directory):
+def getFilePaths(directory):
     for dirpath, _, filenames in os.walk(directory):
         for f in filenames:
             yield os.path.join(dirpath, f)
@@ -82,6 +87,19 @@ def get_env_creds():
                         % str(sys.exc_info()))
 
 
+# deprecated; cant use temp creds otherwise signatures are temp
+def get_temp_creds():
+    ''' returns current set of temp iam role creds '''
+    metadata_url = 'http://169.254.169.254/latest/meta-data/iam/security-credentials/'
+    iam_role_name = urllib2.urlopen(metadata_url).read()
+    json_response = json.loads(urllib2.urlopen(metadata_url +
+                                               iam_role_name).read())
+    access_key = json_response['AccessKeyId']
+    secret_key = json_response['SecretAccessKey']
+    token = json_response['Token']
+    return access_key.encode('ascii'), secret_key.encode('ascii'), token.encode('ascii')
+
+
 def get_user(request):
     ''' return the auth_user who performed the request,
         or none if not found '''
@@ -96,7 +114,7 @@ def get_user(request):
 
 
 def get_s3_files(prefix):
-    ''' lists files from s3
+    ''' lists files froms s3 instead of local disk
         returns tuple of (name, verion_id, last modified, size in K)
     '''
     bucket_name = os.environ['BUCKET']
@@ -114,8 +132,10 @@ def get_s3_files(prefix):
     for f in files:
         if type(f) is not boto.s3.key.Key:
             continue
-        size_in_k = '%.2f' % (float(f.size) / 1024)  # as a string
-        filelist.append((f.name, f.version_id, f.last_modified, size_in_k))
+        size_in_mb = '%.2f' % (float(f.size) / (1024*1024))  # as a string
+        dfmt = '%Y-%m-%dT%H:%M:%S.000Z'
+        date = datetime.strptime(f.last_modified, dfmt)
+        filelist.append((f.name, f.version_id, date, size_in_mb))
     return filelist
 
 
@@ -136,17 +156,19 @@ def get_s3_files_table(prefix):
     for f in files:
         if type(f) is not boto.s3.key.Key:
             continue
-        size_in_k = '%.2f' % (float(f.size) / 1024)
+        size_in_mb = '%.2f' % (float(f.size) / (1024*1024))
         key = f.name[len(prefix):]
         directory = key.partition('/')[0]
         filename = key.partition('/')[-1]
         cb64 = urllib2.quote((f.name).encode('base64').rstrip())
         vb64 = urllib2.quote(f.version_id.encode('base64').rstrip())
+        dfmt = '%Y-%m-%dT%H:%M:%S.000Z'
+        date = datetime.strptime(f.last_modified, dfmt)
         d = { 'name' : filename,
               'dir'  : directory,
               'v_id' : f.version_id,
-              'date' : f.last_modified,
-              'size' : size_in_k,
+              'date' : date,
+              'size' : size_in_mb,
               'cb64' : cb64,
               'vb64' : vb64,
               'key'  : key}
@@ -184,7 +206,7 @@ def ztree_files(prefix):
             version_id = child[1]
             last_modified = child[2]
             size = child[3]
-            filestring = '[%s] %s - %sk' % (last_modified, name, size)  # the displayed text
+            filestring = '[%s] %s - %s MiB' % (last_modified, name, size)  # the displayed text
             cb64 = urllib2.quote((prefix + key + '/' + name).encode('base64').rstrip())  # used for download link only
             vb64 = urllib2.quote(version_id.encode('base64').rstrip())
             childdict.append({'name': filestring,

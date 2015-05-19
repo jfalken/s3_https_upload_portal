@@ -29,11 +29,11 @@
           <tr class="info">
             {% if folder != '' %}
             {% else %}
-              <th class="filter-select">Identifier</th>
+              <th class="filter-select">Identifier <span class="glyphicon glyphicon-sort"></span></th>
             {% endif %}
-            <th class="filter-select">Filename</th>
-            <th class="">Upload Date</th>
-            <th class="">Filesize</th>
+            <th class="filter-select">Filename <span class="glyphicon glyphicon-sort"></span></th>
+            <th class="">Upload Date <span class="glyphicon glyphicon-sort"></span></th>
+            <th class="">Filesize <span class="glyphicon glyphicon-sort"></span></th>
           </tr>
         </thead>
         <tbody>
@@ -48,8 +48,8 @@
                  <a href="/gendl?keyname={{f['cb64']}}&version={{f['vb64']}}">{{ f['name'] }}</a>
                 </strong>
               </td>
-              <td>{{ f['date'] }}</td>
-              <td>{{ f['size'] }}k</td>
+              <td>{{ d2s(f['date']) }}</td>
+              <td>{{ f['size'] }} MiB</td>
             </tr>
           {% endfor %}
         </tbody>

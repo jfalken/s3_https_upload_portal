@@ -27,6 +27,8 @@ from libs.utils import get_user
 from libs.utils import get_env_creds
 from libs.utils import create_folder_and_lifecycle
 from libs.utils import init
+from libs.utils import dt_to_string
+
 
 application = app = Flask(__name__)
 init()
@@ -76,7 +78,8 @@ def list_files():
                                    message='Error %s' % str(sys.exc_info()))
         return render_template('file_list_table.html',
                                files=s3_files,
-                               folder=folder)
+                               folder=folder,
+                               d2s=dt_to_string)
 
 
 @app.route('/')
@@ -231,6 +234,7 @@ def generate_form():
 
     logging.info('User [%s] generated a form called %s'
                  % (get_user(request), directory))
+    portal = directory[len(PREFIX):]
     return render_template('done.html',
                            url=url,
                            bucket_name=bucket_name,
@@ -238,7 +242,9 @@ def generate_form():
                            expiration=exp,
                            policy=policy,
                            signature=signature,
-                           directory=directory)
+                           directory=directory,
+                           url_root=request.url_root,
+                           portal=portal)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Mongo HTTPS Upload')
