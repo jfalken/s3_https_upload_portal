@@ -90,7 +90,7 @@ In the AWS Console GUI:
 
 #### Configuring Credentials
 
-In the GUI under XXXX, set the following environmental variables
+In the GUI under `Config > Software Config`, set the following environmental variables
 
 `BUCKET` = Name of your s3 bucket
 
