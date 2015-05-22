@@ -247,7 +247,7 @@ def generate_form():
                            portal=portal)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Mongo HTTPS Upload')
+    parser = argparse.ArgumentParser(description='HTTPS Upload')
     args = parser.parse_args()
 
     logging = setup_logging()
