@@ -16,6 +16,10 @@ When a customer visits the link, they'll see:
 
 ![main](screenshots/customer_view.png)
 
+And they can simply drag-drop files to you:
+
+![dragdrop](screenshots/drag_drop_demo.gif)
+
 
 ### Generating that link
 
